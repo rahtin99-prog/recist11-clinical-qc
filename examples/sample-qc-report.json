@@ -1,0 +1,32 @@
+{
+  "rows_checked": 4,
+  "errors": 2,
+  "warnings": 2,
+  "status": "review_required",
+  "findings": [
+    {
+      "row": 2,
+      "severity": "warning",
+      "code": "BASELINE_TARGET_SIZE",
+      "message": "Baseline target is below 10 mm; review measurability and imaging criteria."
+    },
+    {
+      "row": 3,
+      "severity": "warning",
+      "code": "BASELINE_TARGET_SIZE",
+      "message": "Baseline target is below 15 mm; review measurability and imaging criteria."
+    },
+    {
+      "row": 4,
+      "severity": "error",
+      "code": "INVALID_DIAMETER",
+      "message": "diameter_mm must be a finite nonnegative number."
+    },
+    {
+      "row": 5,
+      "severity": "error",
+      "code": "DUPLICATE_LESION",
+      "message": "Lesion appears more than once in this patient visit."
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+row,severity,code,message
+2,warning,BASELINE_TARGET_SIZE,Baseline target is below 10 mm; review measurability and imaging criteria.
+3,warning,BASELINE_TARGET_SIZE,Baseline target is below 15 mm; review measurability and imaging criteria.
+4,error,INVALID_DIAMETER,diameter_mm must be a finite nonnegative number.
+5,error,DUPLICATE_LESION,Lesion appears more than once in this patient visit.
