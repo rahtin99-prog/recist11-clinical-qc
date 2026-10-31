@@ -1,0 +1,7 @@
+patient_id,visit,assessment_date,lesion_id,organ,lesion_type,is_target,diameter_mm
+SYNTHETIC-201,baseline,2026-01-01,L1,lung,non_nodal,no,-5
+SYNTHETIC-202,baseline,2026-01-01,L1,lung,non_nodal,maybe,20
+SYNTHETIC-203,baseline,2026-02-30,L1,lung,non_nodal,no,20
+SYNTHETIC-204,baseline,2026-01-01,L1,lung,unknown,no,20
+SYNTHETIC-205,baseline,2026-01-01,L1,lung,non_nodal,no,NaN
+SYNTHETIC-206,baseline,2026-01-01,L1,,non_nodal,yes,20

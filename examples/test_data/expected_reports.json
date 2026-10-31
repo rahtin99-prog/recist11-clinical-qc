@@ -1,0 +1,127 @@
+{
+  "01_clean.csv": {
+    "rows_checked": 4,
+    "errors": 0,
+    "warnings": 0,
+    "status": "passed",
+    "findings": []
+  },
+  "02_invalid_values.csv": {
+    "rows_checked": 6,
+    "errors": 6,
+    "warnings": 0,
+    "status": "review_required",
+    "findings": [
+      {
+        "row": 2,
+        "severity": "error",
+        "code": "INVALID_DIAMETER",
+        "message": "diameter_mm must be a finite nonnegative number."
+      },
+      {
+        "row": 3,
+        "severity": "error",
+        "code": "INVALID_TARGET",
+        "message": "is_target must be yes or no."
+      },
+      {
+        "row": 4,
+        "severity": "error",
+        "code": "INVALID_DATE",
+        "message": "Use a valid YYYY-MM-DD assessment date."
+      },
+      {
+        "row": 5,
+        "severity": "error",
+        "code": "INVALID_LESION_TYPE",
+        "message": "lesion_type must be nodal or non_nodal."
+      },
+      {
+        "row": 6,
+        "severity": "error",
+        "code": "INVALID_DIAMETER",
+        "message": "diameter_mm must be a finite nonnegative number."
+      },
+      {
+        "row": 7,
+        "severity": "error",
+        "code": "REQUIRED_VALUE",
+        "message": "Empty fields: organ"
+      }
+    ]
+  },
+  "03_too_many_targets.csv": {
+    "rows_checked": 6,
+    "errors": 0,
+    "warnings": 2,
+    "status": "review_required",
+    "findings": [
+      {
+        "row": 2,
+        "severity": "warning",
+        "code": "TARGET_COUNT",
+        "message": "Patient has more than five baseline target lesions."
+      },
+      {
+        "row": 2,
+        "severity": "warning",
+        "code": "ORGAN_TARGET_COUNT",
+        "message": "More than two baseline targets in one organ."
+      }
+    ]
+  },
+  "04_changes_across_visits.csv": {
+    "rows_checked": 3,
+    "errors": 0,
+    "warnings": 2,
+    "status": "review_required",
+    "findings": [
+      {
+        "row": 3,
+        "severity": "warning",
+        "code": "LESION_CHANGED",
+        "message": "Organ, lesion type, or target designation changes across visits."
+      },
+      {
+        "row": 4,
+        "severity": "warning",
+        "code": "VISIT_DATE_MISMATCH",
+        "message": "Assessment dates differ within a patient visit; review acquisition timing."
+      }
+    ]
+  },
+  "05_small_baseline_targets.csv": {
+    "rows_checked": 2,
+    "errors": 0,
+    "warnings": 2,
+    "status": "review_required",
+    "findings": [
+      {
+        "row": 2,
+        "severity": "warning",
+        "code": "BASELINE_TARGET_SIZE",
+        "message": "Baseline target is below 10 mm; review measurability and imaging criteria."
+      },
+      {
+        "row": 3,
+        "severity": "warning",
+        "code": "BASELINE_TARGET_SIZE",
+        "message": "Baseline target is below 15 mm; review measurability and imaging criteria."
+      }
+    ]
+  },
+  "06_duplicate_records.csv": {
+    "rows_checked": 2,
+    "errors": 1,
+    "warnings": 0,
+    "status": "review_required",
+    "findings": [
+      {
+        "row": 3,
+        "severity": "error",
+        "code": "DUPLICATE_LESION",
+        "message": "Lesion appears more than once in this patient visit."
+      }
+    ]
+  }
+}
