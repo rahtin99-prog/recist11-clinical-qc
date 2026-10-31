@@ -17,6 +17,9 @@ def main():
     response = sub.add_parser("responses", help="Review timepoint responses and compare reported categories")
     response.add_argument("input", type=Path)
     response.add_argument("--output", type=Path)
+    excel = sub.add_parser("excel", help="Export one complete Excel QC workbook")
+    excel.add_argument("input", type=Path)
+    excel.add_argument("--output", type=Path, default=Path("complete-qc-report.xlsx"))
     serve = sub.add_parser("serve", help="Start the local CSV review web app")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8000)
@@ -26,6 +29,13 @@ def main():
         run_server(args.host, args.port)
         return 0
     try:
+        if args.command == "excel":
+            from .excel import create_workbook
+            text = args.input.read_text(encoding="utf-8-sig")
+            args.output.write_bytes(create_workbook(text, args.input.name))
+            print(f"Excel workbook saved: {args.output}")
+            report = evaluate_responses(text)
+            return 1 if report["data_qc"]["findings"] or report.get("blocked_reason") or report["response_qc"] or any(a["overall_response"] == "NE" for a in report["assessments"]) else 0
         if args.command == "responses":
             report = evaluate_responses(args.input.read_text(encoding="utf-8-sig"))
             output = json.dumps(report, indent=2) + "\n"
@@ -41,6 +51,6 @@ def main():
         else:
             sys.stdout.write(output)
         return 1 if report["findings"] else 0
-    except (OSError, UnicodeError) as exc:
+    except (OSError, UnicodeError, ValueError) as exc:
         print(f"Unable to process file: {exc}", file=sys.stderr)
         return 2

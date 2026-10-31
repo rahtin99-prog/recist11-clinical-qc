@@ -1,6 +1,7 @@
 """Local-only development server. Uploads are processed in memory."""
 import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import unquote
 
 from .core import check_csv
 from .ui import PAGE
@@ -8,6 +9,7 @@ from .cases import CASES
 from .response_cases import RESPONSE_CSV
 from .response import evaluate_responses
 from .verification import verify_cases
+from .excel import create_workbook, MIME
 
 MAX_UPLOAD = 2 * 1024 * 1024
 DEMO_CSV = """patient_id,visit,assessment_date,lesion_id,organ,lesion_type,is_target,diameter_mm
@@ -32,9 +34,11 @@ class Handler(BaseHTTPRequestHandler):
         pass  # Avoid recording uploaded data or request paths.
 
     def respond(self, status, body, content_type="application/json"):
-        data = body.encode("utf-8")
+        data = body.encode("utf-8") if isinstance(body, str) else body
         self.send_response(status)
-        self.send_header("Content-Type", content_type + "; charset=utf-8")
+        self.send_header("Content-Type", content_type + ("; charset=utf-8" if isinstance(body, str) else ""))
+        if content_type == MIME:
+            self.send_header("Content-Disposition", 'attachment; filename="complete-qc-report.xlsx"')
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
@@ -63,7 +67,7 @@ class Handler(BaseHTTPRequestHandler):
             self.respond(404, '{"error":"Not found"}')
 
     def do_POST(self):
-        if self.path not in {"/api/check", "/api/analyze", "/api/responses"}:
+        if self.path not in {"/api/check", "/api/analyze", "/api/responses", "/api/export.xlsx"}:
             self.respond(404, '{"error":"Not found"}')
             return
         try:
@@ -79,6 +83,15 @@ class Handler(BaseHTTPRequestHandler):
         except (UnicodeError, OSError):
             self.respond(400, '{"error":"Unable to read a UTF-8 CSV file."}')
             return
+        if self.path == "/api/export.xlsx":
+            source = unquote(self.headers.get("X-Source-Name", "CSV input"))
+            try:
+                workbook = create_workbook(text, source)
+            except ValueError as exc:
+                self.respond(422, json.dumps({"error": str(exc)}))
+                return
+            self.respond(200, workbook, MIME)
+            return
         if self.path == "/api/check":
             report = check_csv(text)
         elif self.path == "/api/responses":
@@ -86,7 +99,7 @@ class Handler(BaseHTTPRequestHandler):
         else:
             response_review = evaluate_responses(text)
             report = {"data_qc": response_review["data_qc"], "response_review": response_review,
-                      "report_version": "0.2.0"}
+                      "report_version": "0.3.0"}
         self.respond(200, json.dumps(report))
 
 

@@ -126,6 +126,17 @@ class WebTests(unittest.TestCase):
             self.client.open(request)
         self.assertEqual(error.exception.code, 413)
 
+    def test_excel_export(self):
+        import io
+        from zipfile import ZipFile
+        data = Path("examples/response_review.csv").read_bytes()
+        with self.client.open(Request(self.url + "/api/export.xlsx", data=data, headers={"X-Source-Name":"test.csv"})) as response:
+            self.assertEqual(response.headers["Content-Type"], "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            self.assertIn("complete-qc-report.xlsx", response.headers["Content-Disposition"])
+            with ZipFile(io.BytesIO(response.read())) as archive:
+                self.assertIsNone(archive.testzip())
+                self.assertIn(b"test.csv", archive.read("xl/worksheets/sheet1.xml"))
+
 
 if __name__ == "__main__":
     unittest.main()

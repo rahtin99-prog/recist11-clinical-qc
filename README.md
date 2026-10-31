@@ -9,7 +9,7 @@ A local web workspace and Python CLI for lesion CSV quality checks, unconfirmed 
 3. Double-click **start_windows.bat** (Windows may hide the `.bat` extension).
 4. The launcher runs the automated tests, verifies the built-in expected results, and opens your browser on an available local port. Keep the command window open. Close it or press Ctrl+C to stop.
 5. Leave **RECIST responses and reported-response checks** selected and click **Run selected example**.
-6. Click **Run all built-in tests** to see each expected-output check. Try another example or upload your own CSV. Download the complete JSON, findings CSVs, response CSV, test evidence, or print/save the review as PDF.
+6. Click **Run all built-in tests** to see each expected-output check. Try another example or upload your own CSV. Click **Download complete Excel report** for one `.xlsx` workbook containing all results and test evidence.
 
 If Python is missing, install Python 3.11 or newer from python.org. If the launcher shows failures, keep the error text; it deliberately does not start when its checks fail. The launcher selects a fresh available port so an older running copy is not mistaken for the updated app. Never replace a running app's folder; stop it before extracting an update into a new folder.
 
@@ -27,7 +27,8 @@ This development server binds to loopback. Use synthetic or de-identified data. 
 - Data checks for schema, required values, measurements, dates, duplicates, target-size and target-count criteria, and longitudinal attribute changes.
 - Target and overall CR/PR/SD/PD/NE calculations, baseline/nadir measurements, percentage changes, and explanations.
 - QC comparison of an optional reported response against the calculated overall response.
-- Fifteen built-in expected-output checks, visible in the app and downloadable as test evidence.
+- One Excel workbook with Summary, Input Data, Data QC, Responses, Response QC, Tests, and Notes tabs. Numeric measurements remain numeric; identifiers remain text.
+- Fifteen built-in expected-output checks, visible in the app and included in the Excel workbook.
 - Automated unit, CLI, and HTTP tests, run by the launcher.
 
 ## CSV contract
@@ -78,16 +79,21 @@ Reference: Eisenhauer et al., European Journal of Cancer 45 (2009), 228–247, d
 ## CLI
 
 ```sh
+python -m recist_qc excel examples/response_review.csv --output complete-qc-report.xlsx
 python -m recist_qc check examples/lesions.csv
 python -m recist_qc check examples/lesions_with_issues.csv --format csv --output findings.csv
 python -m recist_qc responses examples/response_review.csv --output response-report.json
 python -m unittest discover -s tests -v
 ```
 
+`excel` creates a complete workbook, including fresh synthetic self-test results, and exits 1 if data/response findings, blocked calculations or NE assessments require review; it still saves the workbook. Exit 0 means implemented checks passed, not clinical validation. Older JSON/CSV CLI commands remain available for automation.
+
 `check` exits 0 with no findings, 1 when findings need review, 2 for file/encoding failures. `responses` exits 1 for blocked calculations, NE assessments or response QC findings; 0 otherwise; 2 for file/encoding failures. CSV data finding rows count logical CSV records, including the header; quoted multiline records can span physical lines.
 
 Optional editable installation: create a virtual environment and run `python -m pip install -e .` within it. This downloads setuptools as an isolated build dependency; runtime is standard library only. The `recist-qc` command then mirrors `python -m recist_qc`.
 
 ## HTTP API
+
+`POST /api/export.xlsx` accepts raw UTF-8 CSV and returns the complete Excel workbook (binary XLSX). The optional percent-encoded `X-Source-Name` header identifies the input in the Summary tab.
 
 `GET /health`; `GET /api/examples`; `GET /api/examples/{id}.csv`; `GET /api/self-test`. Send raw UTF-8 CSV bytes to `POST /api/check` (data only), `/api/responses` (response review), or `/api/analyze` (combined). Invalid data findings are reported in a successful HTTP response; unreadable bodies/encoding or size violations use 4xx errors. An HTTP 200 does not mean clinical QC passed.
