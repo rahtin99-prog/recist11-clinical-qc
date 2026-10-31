@@ -1,0 +1,5 @@
+patient_id,visit,assessment_date,lesion_id,organ,lesion_type,is_target,diameter_mm
+SYNTHETIC-002,baseline,2026-01-01,L1,lung,non_nodal,yes,8
+SYNTHETIC-002,baseline,2026-01-01,L2,lymph_nodes,nodal,yes,12
+SYNTHETIC-002,week_6,2026-02-12,L1,lung,non_nodal,yes,-3
+SYNTHETIC-002,week_6,2026-02-12,L1,lung,non_nodal,yes,6
