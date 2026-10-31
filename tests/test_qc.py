@@ -32,6 +32,7 @@ class QualityTests(unittest.TestCase):
         bad = "P1,baseline,2026-02-30,L1,lung,other,maybe,nan\n"
         self.assertEqual(self.codes(HEADER + bad), {"INVALID_DATE", "INVALID_LESION_TYPE", "INVALID_TARGET", "INVALID_DIAMETER"})
         self.assertIn("INVALID_DIAMETER", self.codes(HEADER + VALID.replace(",20\n", ",-1\n")))
+        self.assertIn("INVALID_DATE", self.codes(HEADER + VALID.replace("2026-01-01", "2026-W01-1")))
 
     def test_duplicate_and_malformed(self):
         self.assertIn("DUPLICATE_LESION", self.codes(HEADER + VALID * 2))
@@ -99,6 +100,31 @@ class WebTests(unittest.TestCase):
         with self.client.open(Request(self.url + "/api/check", data=sample)) as response:
             report = json.load(response)
         self.assertEqual((report["rows_checked"], report["errors"], report["warnings"]), (4, 2, 2))
+
+    def test_complete_workflow_and_expected_tests(self):
+        with self.client.open(self.url + "/api/examples") as response:
+            examples = json.load(response)
+        self.assertEqual(len(examples), 7)
+        with self.client.open(self.url + "/api/examples/responses.csv") as response:
+            sample = response.read()
+        with self.client.open(Request(self.url + "/api/analyze", data=sample)) as response:
+            report = json.load(response)
+        self.assertEqual(report["data_qc"]["errors"], 0)
+        self.assertEqual(len(report["response_review"]["assessments"]), 8)
+        self.assertEqual(len(report["response_review"]["response_qc"]), 3)
+        with self.client.open(self.url + "/api/self-test") as response:
+            report = json.load(response)
+        self.assertTrue(report["passed"])
+        self.assertEqual(report["passed_count"], 15)
+
+    def test_unknown_example_and_oversized_upload(self):
+        with self.assertRaises(HTTPError) as error:
+            self.client.open(self.url + "/api/examples/not-real.csv")
+        self.assertEqual(error.exception.code, 404)
+        request = Request(self.url + "/api/analyze", data=b"x", headers={"Content-Length": str(2*1024*1024+1)})
+        with self.assertRaises(HTTPError) as error:
+            self.client.open(request)
+        self.assertEqual(error.exception.code, 413)
 
 
 if __name__ == "__main__":

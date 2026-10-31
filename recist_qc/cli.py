@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 from .core import check_csv, findings_csv
+from .response import evaluate_responses
 
 
 def main():
@@ -13,6 +14,9 @@ def main():
     check.add_argument("input", type=Path)
     check.add_argument("--format", choices=("json", "csv"), default="json")
     check.add_argument("--output", type=Path)
+    response = sub.add_parser("responses", help="Review timepoint responses and compare reported categories")
+    response.add_argument("input", type=Path)
+    response.add_argument("--output", type=Path)
     serve = sub.add_parser("serve", help="Start the local CSV review web app")
     serve.add_argument("--host", default="127.0.0.1")
     serve.add_argument("--port", type=int, default=8000)
@@ -22,6 +26,14 @@ def main():
         run_server(args.host, args.port)
         return 0
     try:
+        if args.command == "responses":
+            report = evaluate_responses(args.input.read_text(encoding="utf-8-sig"))
+            output = json.dumps(report, indent=2) + "\n"
+            if args.output:
+                args.output.write_text(output, encoding="utf-8")
+            else:
+                sys.stdout.write(output)
+            return 1 if report.get("blocked_reason") or report["response_qc"] or any(a["overall_response"] == "NE" for a in report["assessments"]) else 0
         report = check_csv(args.input.read_text(encoding="utf-8-sig"))
         output = json.dumps(report, indent=2) + "\n" if args.format == "json" else findings_csv(report)
         if args.output:

@@ -1,0 +1,160 @@
+{
+  "data_qc": {
+    "rows_checked": 32,
+    "errors": 0,
+    "warnings": 0,
+    "status": "passed",
+    "findings": []
+  },
+  "assessments": [
+    {
+      "patient_id": "SYNTHETIC-CR",
+      "visit": "week_6",
+      "assessment_date": "2026-02-12",
+      "baseline_sum_mm": 100.0,
+      "prior_nadir_mm": 100.0,
+      "sum_mm": 8.0,
+      "change_from_baseline_pct": -92.0,
+      "change_from_nadir_pct": -92.0,
+      "increase_from_nadir_mm": -92.0,
+      "target_response": "CR",
+      "overall_response": "CR",
+      "reason": "All non-nodal targets are zero and every target node is below 10 mm short axis. Target and non-target assessments support complete response with no new lesions.",
+      "reported_response": "CR",
+      "comparison": "matches"
+    },
+    {
+      "patient_id": "SYNTHETIC-PR",
+      "visit": "week_6",
+      "assessment_date": "2026-02-12",
+      "baseline_sum_mm": 100.0,
+      "prior_nadir_mm": 100.0,
+      "sum_mm": 70.0,
+      "change_from_baseline_pct": -30.0,
+      "change_from_nadir_pct": -30.0,
+      "increase_from_nadir_mm": -30.0,
+      "target_response": "PR",
+      "overall_response": "PR",
+      "reason": "Target sum decreased at least 30% from baseline without target progression. No new lesions or non-target progression change the target response.",
+      "reported_response": "PR",
+      "comparison": "matches"
+    },
+    {
+      "patient_id": "SYNTHETIC-SD",
+      "visit": "week_6",
+      "assessment_date": "2026-02-12",
+      "baseline_sum_mm": 100.0,
+      "prior_nadir_mm": 100.0,
+      "sum_mm": 95.0,
+      "change_from_baseline_pct": -5.0,
+      "change_from_nadir_pct": -5.0,
+      "increase_from_nadir_mm": -5.0,
+      "target_response": "SD",
+      "overall_response": "SD",
+      "reason": "Target measurements meet neither CR, PR nor PD thresholds. No new lesions or non-target progression change the target response.",
+      "reported_response": "SD",
+      "comparison": "matches"
+    },
+    {
+      "patient_id": "SYNTHETIC-PD",
+      "visit": "week_6",
+      "assessment_date": "2026-02-12",
+      "baseline_sum_mm": 100.0,
+      "prior_nadir_mm": 100.0,
+      "sum_mm": 120.0,
+      "change_from_baseline_pct": 20.0,
+      "change_from_nadir_pct": 20.0,
+      "increase_from_nadir_mm": 20.0,
+      "target_response": "PD",
+      "overall_response": "PD",
+      "reason": "Target sum increased at least 20% and at least 5 mm from the prior nadir. Progression is indicated by targets, unequivocal non-target progression, or unequivocal new lesions.",
+      "reported_response": "PD",
+      "comparison": "matches"
+    },
+    {
+      "patient_id": "SYNTHETIC-NEW",
+      "visit": "week_6",
+      "assessment_date": "2026-02-12",
+      "baseline_sum_mm": 100.0,
+      "prior_nadir_mm": 100.0,
+      "sum_mm": 70.0,
+      "change_from_baseline_pct": -30.0,
+      "change_from_nadir_pct": -30.0,
+      "increase_from_nadir_mm": -30.0,
+      "target_response": "PR",
+      "overall_response": "PD",
+      "reason": "Target sum decreased at least 30% from baseline without target progression. Progression is indicated by targets, unequivocal non-target progression, or unequivocal new lesions.",
+      "reported_response": "PR",
+      "comparison": "mismatch"
+    },
+    {
+      "patient_id": "SYNTHETIC-NT_PD",
+      "visit": "week_6",
+      "assessment_date": "2026-02-12",
+      "baseline_sum_mm": 100.0,
+      "prior_nadir_mm": 100.0,
+      "sum_mm": 70.0,
+      "change_from_baseline_pct": -30.0,
+      "change_from_nadir_pct": -30.0,
+      "increase_from_nadir_mm": -30.0,
+      "target_response": "PR",
+      "overall_response": "PD",
+      "reason": "Target sum decreased at least 30% from baseline without target progression. Progression is indicated by targets, unequivocal non-target progression, or unequivocal new lesions.",
+      "reported_response": "PD",
+      "comparison": "matches"
+    },
+    {
+      "patient_id": "SYNTHETIC-MISMATCH",
+      "visit": "week_6",
+      "assessment_date": "2026-02-12",
+      "baseline_sum_mm": 100.0,
+      "prior_nadir_mm": 100.0,
+      "sum_mm": 70.0,
+      "change_from_baseline_pct": -30.0,
+      "change_from_nadir_pct": -30.0,
+      "increase_from_nadir_mm": -30.0,
+      "target_response": "PR",
+      "overall_response": "PR",
+      "reason": "Target sum decreased at least 30% from baseline without target progression. No new lesions or non-target progression change the target response.",
+      "reported_response": "SD",
+      "comparison": "mismatch"
+    },
+    {
+      "patient_id": "SYNTHETIC-MISSING",
+      "visit": "week_6",
+      "assessment_date": "2026-02-12",
+      "baseline_sum_mm": 100.0,
+      "prior_nadir_mm": 100.0,
+      "sum_mm": 70.0,
+      "change_from_baseline_pct": -30.0,
+      "change_from_nadir_pct": -30.0,
+      "increase_from_nadir_mm": -30.0,
+      "target_response": "PR",
+      "overall_response": "NE",
+      "reason": "Target sum decreased at least 30% from baseline without target progression. Supply new_lesions=yes/no/unknown and non_target_response=CR/NON_CR_NON_PD/PD/NE/NOT_APPLICABLE.",
+      "reported_response": "PR",
+      "comparison": "cannot verify"
+    }
+  ],
+  "response_qc": [
+    {
+      "patient_id": "SYNTHETIC-NEW",
+      "visit": "week_6",
+      "code": "RESPONSE_MISMATCH",
+      "message": "Reported PR; calculated PD. Target sum decreased at least 30% from baseline without target progression. Progression is indicated by targets, unequivocal non-target progression, or unequivocal new lesions."
+    },
+    {
+      "patient_id": "SYNTHETIC-MISMATCH",
+      "visit": "week_6",
+      "code": "RESPONSE_MISMATCH",
+      "message": "Reported SD; calculated PR. Target sum decreased at least 30% from baseline without target progression. No new lesions or non-target progression change the target response."
+    },
+    {
+      "patient_id": "SYNTHETIC-MISSING",
+      "visit": "week_6",
+      "code": "RESPONSE_NOT_EVALUABLE",
+      "message": "Reported PR; calculated NE. Target sum decreased at least 30% from baseline without target progression. Supply new_lesions=yes/no/unknown and non_target_response=CR/NON_CR_NON_PD/PD/NE/NOT_APPLICABLE."
+    }
+  ],
+  "scope": "Unconfirmed timepoint response review. No best overall response or protocol confirmation rules."
+}

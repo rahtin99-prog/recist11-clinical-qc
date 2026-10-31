@@ -3,6 +3,7 @@
 import csv
 import io
 import math
+import re
 from collections import defaultdict
 from dataclasses import asdict, dataclass
 from datetime import date
@@ -57,7 +58,7 @@ def check_csv(text: str) -> dict:
             seen.add(key)
             try:
                 date.fromisoformat(row["assessment_date"])
-                if len(row["assessment_date"]) != 10:
+                if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", row["assessment_date"]):
                     raise ValueError()
             except ValueError:
                 add(line, "error", "INVALID_DATE", "Use a valid YYYY-MM-DD assessment date.")
